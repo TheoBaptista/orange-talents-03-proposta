@@ -28,17 +28,17 @@ public class CriaPropostaController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<?> criaProposta(@Valid @RequestBody PropostaRequest propostaRequest, UriComponentsBuilder builder){
+    public ResponseEntity<?> criaProposta(@Valid @RequestBody PropostaRequest propostaRequest, UriComponentsBuilder builder) {
 
-        if(repository.existsByDocumento(propostaRequest.getDocumento())){
-           return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(new FieldErrors(propostaRequest.jaExistePropostaIgual()));
+        if (repository.existsByDocumento(propostaRequest.getDocumento())) {
+            logger.warn("Tentativa de criação de uma proposta com o documento {} que já existe no sistema",propostaRequest.getDocumento());
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(new FieldErrors(propostaRequest.jaExistePropostaIgual()));
         }
 
         Proposta proposta = propostaRequest.toModel();
         repository.save(proposta);
 
-        String message = String.format("Proposta %s criada com sucesso!",proposta.getId());
-        logger.info(message);
+        logger.info("Proposta documento={} salário={} criada com sucesso!", proposta.getDocumento(), proposta.getSalario());
 
         URI uri = builder.path("/api/propostas/{id}")
                 .buildAndExpand(proposta.getId()).toUri();

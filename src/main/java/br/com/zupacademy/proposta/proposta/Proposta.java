@@ -11,17 +11,17 @@ import java.util.UUID;
 public class Proposta {
 
     @Id
-    public String id;
-    @Column(nullable = false,unique = true)
-    public String documento;
+    private String id;
+    @Column(nullable = false, unique = true)
+    private String documento;
     @Column(nullable = false)
-    public String email;
+    private String email;
     @Column(nullable = false)
-    public String nome;
+    private String nome;
     @Column(nullable = false)
-    public String endereco;
+    private String endereco;
     @Column(nullable = false)
-    public BigDecimal salario;
+    private BigDecimal salario;
 
     /**
      * @deprecated (Hibernate only)
@@ -49,5 +49,13 @@ public class Proposta {
 
     public String getNome() {
         return nome;
+    }
+
+    public String getDocumento() {
+        return documento;
+    }
+
+    public BigDecimal getSalario() {
+        return salario;
     }
 }
