@@ -3,7 +3,6 @@ package br.com.zupacademy.proposta.error;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
@@ -33,7 +32,7 @@ public class ExceptionHandlerAdvice {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                 new FieldErrors(
                         errors.stream()
-                                .map(e ->  String.format("%s :  %s", e.getField(),e.getDefaultMessage()))
+                                .map(e ->  String.format("Campo %s :  %s", e.getField(),e.getDefaultMessage()))
                                 .collect(Collectors.toList())));
     }
 
@@ -45,7 +44,7 @@ public class ExceptionHandlerAdvice {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                 new FieldErrors(
                         errors.stream()
-                                .map(e ->  String.format("%s :  %s", e.getField(),e.getDefaultMessage()))
+                                .map(e ->  String.format("Campo %s :  %s", e.getField(),e.getDefaultMessage()))
                                 .collect(Collectors.toList())));
 
     }
@@ -61,15 +60,12 @@ public class ExceptionHandlerAdvice {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(IllegalArgumentException.class)
     public FieldErrors springAssertionArgumentException(IllegalArgumentException exception){
-
         return new FieldErrors(exception.getMessage());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(IllegalStateException.class)
     public FieldErrors springAssertionStateException(IllegalStateException exception){
-
         return new FieldErrors(exception.getMessage());
     }
-
 }

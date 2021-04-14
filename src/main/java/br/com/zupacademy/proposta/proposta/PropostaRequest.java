@@ -2,13 +2,12 @@ package br.com.zupacademy.proposta.proposta;
 
 import br.com.zupacademy.proposta.shared.CPForCNPJConstraint;
 
-import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
 
 public class PropostaRequest {
 
-    @NotBlank @CPForCNPJConstraint @Pattern(regexp = "\\d+",message = "Deve conter apenas núemeros!")
+    @NotBlank @CPForCNPJConstraint @Pattern(regexp = "\\d+",message = "Deve conter apenas números!")
     private String documento;
     @NotBlank @Email
     private String email;
@@ -25,6 +24,14 @@ public class PropostaRequest {
         this.nome = nome;
         this.endereco = endereco;
         this.salario = salario;
+    }
+
+    public String getDocumento() {
+        return documento;
+    }
+
+    public String jaExistePropostaIgual(){
+        return String.format("Campo documento : Já existe um documento com esse número!");
     }
 
     public Proposta toModel(){
