@@ -53,7 +53,7 @@ public class CriaPropostaController {
         URI uri = builder.path("/api/propostas/{id}")
                 .buildAndExpand(proposta.getId()).toUri();
 
-        return ResponseEntity.ok().body(uri);
+        return ResponseEntity.created(uri).build();
     }
 
     private Boolean verificarRestricao(ConsultaRestricaoSolicitanteRequest request) {
