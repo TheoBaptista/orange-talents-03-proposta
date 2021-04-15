@@ -1,6 +1,6 @@
 package br.com.zupacademy.proposta.proposta;
 
-import br.com.zupacademy.proposta.shared.CPForCNPJConstraint;
+import br.com.zupacademy.proposta.compartilhado.CPForCNPJConstraint;
 
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
@@ -9,18 +9,18 @@ public class PropostaRequest {
 
     @NotBlank
     @CPForCNPJConstraint
-    @Pattern(regexp = "\\d+", message = "Deve conter apenas números!")
-    private String documento;
+    @Pattern(regexp = "\\d+",message ="O documento deve conter apenas números!")
+    private final String documento;
     @NotBlank
     @Email
-    private String email;
+    private final String email;
     @NotBlank
-    private String nome;
+    private final String nome;
     @NotBlank
-    private String endereco;
+    private final String endereco;
     @NotNull
     @PositiveOrZero
-    private BigDecimal salario;
+    private final BigDecimal salario;
 
     public PropostaRequest(@NotBlank String documento, @NotBlank @Email String email, @NotBlank String nome, @NotBlank String endereco, @NotNull @PositiveOrZero BigDecimal salario) {
         this.documento = documento;

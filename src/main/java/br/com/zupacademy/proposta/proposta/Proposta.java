@@ -1,8 +1,8 @@
 package br.com.zupacademy.proposta.proposta;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import org.springframework.util.Assert;
+
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Locale;
 import java.util.UUID;
@@ -22,6 +22,8 @@ public class Proposta {
     private String endereco;
     @Column(nullable = false)
     private BigDecimal salario;
+    @Enumerated(EnumType.STRING)
+    private AnaliseFinanceiraStatus status;
 
     /**
      * @deprecated (Hibernate only)
@@ -55,7 +57,20 @@ public class Proposta {
         return documento;
     }
 
+    public AnaliseFinanceiraStatus getStatus() {
+        return status;
+    }
+
     public BigDecimal getSalario() {
         return salario;
+    }
+
+    public void validarRestricao(Boolean solicitanteNaoTemRestricao) {
+        if(solicitanteNaoTemRestricao){
+            Assert.state(solicitanteNaoTemRestricao,"O solicitante tem restrições na análise financeira, portanto não pode ser ELEGÍVEL");
+            this.status = AnaliseFinanceiraStatus.ELEGIVEL;
+        }else{
+            this.status = AnaliseFinanceiraStatus.NAO_ELEGIVEL;
+        }
     }
 }

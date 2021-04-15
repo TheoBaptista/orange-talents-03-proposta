@@ -1,4 +1,4 @@
-package br.com.zupacademy.proposta.shared;
+package br.com.zupacademy.proposta.compartilhado;
 
 import org.hibernate.validator.constraints.CompositionType;
 import org.hibernate.validator.constraints.ConstraintComposition;
