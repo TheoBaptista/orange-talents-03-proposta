@@ -12,6 +12,7 @@ import java.util.UUID;
 public class Cartao {
 
     @Id
+    @Column(name = "cartao_id")
     private String id;
     @Column(nullable = false)
     private String numero;

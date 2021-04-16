@@ -16,13 +16,11 @@ import java.util.List;
 public class ConsultaCartoesScheduled {
 
     private final PropostaRepository propostaRepository;
-    private final CartaoRepository cartaoRepository;
     private final ConsultaCartaoFeignClient consultaCartaoFeignClient;
     private final Logger logger = LoggerFactory.getLogger(ConsultaCartoesScheduled.class);
 
-    public ConsultaCartoesScheduled(PropostaRepository propostaRepository, CartaoRepository cartaoRepository, ConsultaCartaoFeignClient consultaCartaoFeignClient) {
+    public ConsultaCartoesScheduled(PropostaRepository propostaRepository, ConsultaCartaoFeignClient consultaCartaoFeignClient) {
         this.propostaRepository = propostaRepository;
-        this.cartaoRepository = cartaoRepository;
         this.consultaCartaoFeignClient = consultaCartaoFeignClient;
     }
 
@@ -36,11 +34,11 @@ public class ConsultaCartoesScheduled {
                 ConsultaCartaoRequest request = new ConsultaCartaoRequest(proposta);
                 ConsultaCartaoResponse consultaCartaoResponse = consultaCartaoFeignClient.consultaCartao(request);
                 Cartao cartao = consultaCartaoResponse.toModel();
-                cartaoRepository.save(cartao);
+
                 proposta.adicionaCartaoAProposta(cartao);
                 propostaRepository.save(proposta);
                 logger.info("Cartao com final {} relacionado a proposta {}",cartao.numeroCartaoOfuscado(),proposta.getId());
-            }catch (FeignException.InternalServerError  e){
+            }catch (FeignException e){
                 logger.warn("Cartão da proposta {} ainda não foi processado",proposta.getId());
             }catch (Exception e ){
                 logger.error("Erro na aplicação",e);

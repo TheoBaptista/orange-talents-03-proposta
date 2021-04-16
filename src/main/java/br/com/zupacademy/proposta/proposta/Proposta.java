@@ -29,7 +29,8 @@ public class Proposta {
     @Enumerated(EnumType.STRING)
     private AnaliseFinanceiraStatus status;
     @Valid
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "cartao_id")
     private Cartao cartao;
 
     /**
