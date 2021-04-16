@@ -39,6 +39,7 @@ public class ConsultaCartoesScheduled {
                 cartaoRepository.save(cartao);
                 proposta.adicionaCartaoAProposta(cartao);
                 propostaRepository.save(proposta);
+                logger.info("Cartao com final {} relacionado a proposta {}",cartao.numeroCartaoOfuscado(),proposta.getId());
             }catch (FeignException.InternalServerError  e){
                 logger.warn("Cartão da proposta {} ainda não foi processado",proposta.getId());
             }catch (Exception e ){

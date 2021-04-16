@@ -31,4 +31,12 @@ public class Cartao {
         this.numero = numero;
         this.titular = titular;
     }
+
+    public String getNumero() {
+        return numero;
+    }
+
+    public String numeroCartaoOfuscado(){
+        return this.numero.substring(15);
+    }
 }

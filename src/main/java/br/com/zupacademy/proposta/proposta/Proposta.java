@@ -1,6 +1,8 @@
 package br.com.zupacademy.proposta.proposta;
 
 import br.com.zupacademy.proposta.cartao.Cartao;
+import br.com.zupacademy.proposta.feign.ConsultaRestricaoFinanceiraSolicitanteFeignClient;
+import feign.FeignException;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
@@ -70,13 +72,16 @@ public class Proposta {
         return salario;
     }
 
-    public void validarRestricao(Boolean solicitanteNaoTemRestricao) {
-        if(solicitanteNaoTemRestricao){
-            Assert.state(solicitanteNaoTemRestricao,"O solicitante tem restrições na análise financeira, portanto não pode ser ELEGÍVEL");
+    public String documentoOfuscado(){ return this.documento.substring(1,6);}
+
+    public void verificarRestricaoFinanceira(ConsultaRestricaoFinanceiraSolicitanteFeignClient consultaRestricaoFinanceiraSolicitanteFeignClient) {
+        try {
+            consultaRestricaoFinanceiraSolicitanteFeignClient.consultaRestricaoFinanceiraSolicitante(new ConsultaPropostaRequest(this));
             this.status = AnaliseFinanceiraStatus.ELEGIVEL;
-        }else{
+        } catch (FeignException.UnprocessableEntity e) {
             this.status = AnaliseFinanceiraStatus.NAO_ELEGIVEL;
         }
+        Assert.state(this.status!=null,"O status não devia ser nulo, há algo errado!");
     }
 
     public void adicionaCartaoAProposta(Cartao cartao){
