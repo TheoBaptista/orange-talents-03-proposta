@@ -5,7 +5,7 @@ import br.com.zupacademy.proposta.compartilhado.CPForCNPJConstraint;
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
 
-public class PropostaRequest {
+public class NovaPropostaRequest {
 
     @NotBlank
     @CPForCNPJConstraint
@@ -22,7 +22,7 @@ public class PropostaRequest {
     @PositiveOrZero
     private final BigDecimal salario;
 
-    public PropostaRequest(@NotBlank String documento, @NotBlank @Email String email, @NotBlank String nome, @NotBlank String endereco, @NotNull @PositiveOrZero BigDecimal salario) {
+    public NovaPropostaRequest(@NotBlank String documento, @NotBlank @Email String email, @NotBlank String nome, @NotBlank String endereco, @NotNull @PositiveOrZero BigDecimal salario) {
         this.documento = documento;
         this.email = email;
         this.nome = nome;

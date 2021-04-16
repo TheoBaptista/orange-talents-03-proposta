@@ -1,8 +1,7 @@
 package br.com.zupacademy.proposta.proposta;
 
 import br.com.zupacademy.proposta.error.FieldErrors;
-import br.com.zupacademy.proposta.restricaoFinanceira.ConsultaRestricaoSolicitanteFeignClient;
-import br.com.zupacademy.proposta.restricaoFinanceira.ConsultaRestricaoSolicitanteRequest;
+import br.com.zupacademy.proposta.feign.ConsultaRestricaoFinanceiraSolicitanteFeignClient;
 import feign.FeignException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,41 +22,36 @@ public class CriaPropostaController {
 
     private final PropostaRepository repository;
     private final Logger logger = LoggerFactory.getLogger(CriaPropostaController.class);
-    private final ConsultaRestricaoSolicitanteFeignClient consultaRestricaoSolicitanteFeignClient;
+    private final ConsultaRestricaoFinanceiraSolicitanteFeignClient consultaRestricaoFinanceiraSolicitanteFeignClient;
 
-    public CriaPropostaController(PropostaRepository repository, ConsultaRestricaoSolicitanteFeignClient consultaRestricaoSolicitanteFeignClient) {
+    public CriaPropostaController(PropostaRepository repository, ConsultaRestricaoFinanceiraSolicitanteFeignClient consultaRestricaoFinanceiraSolicitanteFeignClient) {
         this.repository = repository;
-        this.consultaRestricaoSolicitanteFeignClient = consultaRestricaoSolicitanteFeignClient;
+        this.consultaRestricaoFinanceiraSolicitanteFeignClient = consultaRestricaoFinanceiraSolicitanteFeignClient;
     }
 
     @PostMapping
     @Transactional
-    public ResponseEntity<?> criaProposta(@Valid @RequestBody PropostaRequest propostaRequest, UriComponentsBuilder builder) {
+    public ResponseEntity<?> criaProposta(@Valid @RequestBody NovaPropostaRequest novaPropostaRequest, UriComponentsBuilder builder) {
 
-        if (repository.existsByDocumento(propostaRequest.getDocumento())) {
-            logger.warn("Tentativa de criação de uma proposta com o documento {} que já existe no sistema", propostaRequest.getDocumento());
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(new FieldErrors(propostaRequest.jaExistePropostaIgual()));
+        if (repository.existsByDocumento(novaPropostaRequest.getDocumento())) {
+            logger.warn("Tentativa de criação de uma proposta com o documento {} que já existe no sistema", novaPropostaRequest.getDocumento());
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(new FieldErrors(novaPropostaRequest.jaExistePropostaIgual()));
         }
 
-        Proposta proposta = propostaRequest.toModel();
+        Proposta proposta = novaPropostaRequest.toModel();
 
-
-
-        Boolean solicitanteNaoTemRestricao = verificarRestricao(new ConsultaRestricaoSolicitanteRequest(proposta));
+        Boolean solicitanteNaoTemRestricao = verificarRestricao(new ConsultaPropostaRequest(proposta));
         proposta.validarRestricao(solicitanteNaoTemRestricao);
 
-
         repository.save(proposta);
-        logger.info("Proposta criada com sucesso! documento={} salário={} status da proposta={}", proposta.getDocumento(), proposta.getSalario(),proposta.getStatus());
-
-
+        logger.info("Proposta criada com sucesso! documento={} salário={} status da proposta={}", proposta.getDocumento(), proposta.getSalario(), proposta.getStatus());
 
         return ResponseEntity.created(builder.path("/api/propostas/{id}").build(proposta.getId())).build();
     }
 
-    private Boolean verificarRestricao(ConsultaRestricaoSolicitanteRequest request) {
+    private Boolean verificarRestricao(ConsultaPropostaRequest request) {
         try {
-            consultaRestricaoSolicitanteFeignClient.retornaConsultaFinanceiraSolicitante(request);
+            consultaRestricaoFinanceiraSolicitanteFeignClient.consultaRestricaoFinanceiraSolicitante(request);
             return true;
 
         } catch (FeignException.UnprocessableEntity e) {

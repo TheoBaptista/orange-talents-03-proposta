@@ -1,8 +1,10 @@
 package br.com.zupacademy.proposta.proposta;
 
+import br.com.zupacademy.proposta.cartao.Cartao;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.util.Locale;
 import java.util.UUID;
@@ -24,6 +26,9 @@ public class Proposta {
     private BigDecimal salario;
     @Enumerated(EnumType.STRING)
     private AnaliseFinanceiraStatus status;
+    @Valid
+    @OneToOne
+    private Cartao cartao;
 
     /**
      * @deprecated (Hibernate only)
@@ -72,5 +77,10 @@ public class Proposta {
         }else{
             this.status = AnaliseFinanceiraStatus.NAO_ELEGIVEL;
         }
+    }
+
+    public void adicionaCartaoAProposta(Cartao cartao){
+        Assert.state(this.cartao==null,"Essa proposta já tem um cartão relacionado");
+        this.cartao = cartao;
     }
 }

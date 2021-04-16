@@ -1,20 +1,18 @@
-package br.com.zupacademy.proposta.restricaoFinanceira;
+package br.com.zupacademy.proposta.proposta;
 
-import br.com.zupacademy.proposta.proposta.Proposta;
+public class ConsultaPropostaRequest {
 
-public class ConsultaRestricaoSolicitanteRequest {
+    private final String documento;
+    private final String nome;
+    private final String idProposta;
 
-    private String documento;
-    private String nome;
-    private String idProposta;
-
-    public ConsultaRestricaoSolicitanteRequest(String documento, String nome, String idProposta) {
+    public ConsultaPropostaRequest(String documento, String nome, String idProposta) {
         this.documento = documento;
         this.nome = nome;
         this.idProposta = idProposta;
     }
 
-    public ConsultaRestricaoSolicitanteRequest(Proposta proposta) {
+    public ConsultaPropostaRequest(Proposta proposta) {
         this.documento = proposta.getDocumento();
         this.nome = proposta.getNome();
         this.idProposta = proposta.getId();
