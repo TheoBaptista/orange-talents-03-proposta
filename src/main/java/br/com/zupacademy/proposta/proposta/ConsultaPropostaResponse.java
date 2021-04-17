@@ -17,12 +17,15 @@ public class ConsultaPropostaResponse {
     public String getDocumento() {
         return documento;
     }
+
     public String getNome() {
         return nome;
     }
+
     public String getResultadoSolicitacao() {
         return resultadoSolicitacao;
     }
+
     public String getIdProposta() {
         return idProposta;
     }

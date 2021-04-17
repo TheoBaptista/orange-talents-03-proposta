@@ -34,16 +34,14 @@ public class NovaPropostaRequest {
         return documento;
     }
 
-    public String jaExistePropostaIgual() {
-        return String.format("Campo documento : Já existe um documento com esse número!");
-    }
-
     public String documentoOfuscado(){
         return this.documento.substring(6);
     }
 
-    public Proposta toModel() {
-        return new Proposta(this.documento, this.email, this.nome, this.endereco, this.salario);
+    public Proposta toModel() { return new Proposta(this.documento, this.email, this.nome, this.endereco, this.salario); }
+
+    public String jaExistePropostaIgual() {
+        return String.format("Campo documento : Já existe um documento com esse número!");
     }
 
 }

@@ -6,24 +6,22 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("api/propostas")
-public class CriaPropostaController {
+public class PropostaController {
 
     private final PropostaRepository repository;
-    private final Logger logger = LoggerFactory.getLogger(CriaPropostaController.class);
+    private final Logger logger = LoggerFactory.getLogger(PropostaController.class);
     private final ConsultaRestricaoFinanceiraSolicitanteFeignClient consultaRestricaoFinanceiraSolicitanteFeignClient;
 
-    public CriaPropostaController(PropostaRepository repository, ConsultaRestricaoFinanceiraSolicitanteFeignClient consultaRestricaoFinanceiraSolicitanteFeignClient) {
+    public PropostaController(PropostaRepository repository, ConsultaRestricaoFinanceiraSolicitanteFeignClient consultaRestricaoFinanceiraSolicitanteFeignClient) {
         this.repository = repository;
         this.consultaRestricaoFinanceiraSolicitanteFeignClient = consultaRestricaoFinanceiraSolicitanteFeignClient;
     }
@@ -42,8 +40,18 @@ public class CriaPropostaController {
         proposta.verificarRestricaoFinanceira(consultaRestricaoFinanceiraSolicitanteFeignClient);
 
         repository.save(proposta);
-        logger.info("Proposta criada com sucesso! documento={} salário={} status da proposta={}", proposta.documentoOfuscado(), proposta.getSalario(), proposta.getStatus());
+        logger.info("Proposta criada com sucesso! documento={} salário={} status da proposta={}", proposta.documentoOfuscado(), proposta.getSalario(), proposta.getAnaliseFinanceiraStatus());
 
         return ResponseEntity.created(builder.path("/api/propostas/{id}").build(proposta.getId())).build();
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> listaPropostaPorId(@PathVariable("id") String propostaId){
+        Optional<Proposta> optional = repository.findById(propostaId);
+
+        if(optional.isEmpty()) return ResponseEntity.notFound().build();
+
+        return ResponseEntity.ok().body(new PropostaResponse(optional.get()));
+    }
+
 }

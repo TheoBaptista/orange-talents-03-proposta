@@ -27,11 +27,13 @@ public class Proposta {
     @Column(nullable = false)
     private BigDecimal salario;
     @Enumerated(EnumType.STRING)
-    private AnaliseFinanceiraStatus status;
+    private AnaliseFinanceiraStatus analiseFinanceiraStatus;
     @Valid
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "cartao_id")
     private Cartao cartao;
+    @Enumerated(EnumType.STRING)
+    private StatusCartao statusCartao;
 
     /**
      * @deprecated (Hibernate only)
@@ -61,12 +63,16 @@ public class Proposta {
         return nome;
     }
 
+    public String getEndereco() { return endereco; }
+
+    public Cartao getCartao() { return cartao; }
+
     public String getDocumento() {
         return documento;
     }
 
-    public AnaliseFinanceiraStatus getStatus() {
-        return status;
+    public AnaliseFinanceiraStatus getAnaliseFinanceiraStatus() {
+        return analiseFinanceiraStatus;
     }
 
     public BigDecimal getSalario() {
@@ -75,18 +81,27 @@ public class Proposta {
 
     public String documentoOfuscado(){ return this.documento.substring(1,6);}
 
-    public void verificarRestricaoFinanceira(ConsultaRestricaoFinanceiraSolicitanteFeignClient consultaRestricaoFinanceiraSolicitanteFeignClient) {
-        try {
-            consultaRestricaoFinanceiraSolicitanteFeignClient.consultaRestricaoFinanceiraSolicitante(new ConsultaPropostaRequest(this));
-            this.status = AnaliseFinanceiraStatus.ELEGIVEL;
-        } catch (FeignException.UnprocessableEntity e) {
-            this.status = AnaliseFinanceiraStatus.NAO_ELEGIVEL;
-        }
-        Assert.state(this.status!=null,"O status não devia ser nulo, há algo errado!");
+    public StatusCartao getStatusCartao() {
+        return statusCartao;
     }
 
     public void adicionaCartaoAProposta(Cartao cartao){
         Assert.state(this.cartao==null,"Essa proposta já tem um cartão relacionado");
         this.cartao = cartao;
+        this.statusCartao = StatusCartao.CRIADO;
     }
+
+    public void verificarRestricaoFinanceira(ConsultaRestricaoFinanceiraSolicitanteFeignClient consultaRestricaoFinanceiraSolicitanteFeignClient) {
+        try {
+            consultaRestricaoFinanceiraSolicitanteFeignClient.consultaRestricaoFinanceiraSolicitante(new ConsultaPropostaRequest(this));
+            this.analiseFinanceiraStatus = AnaliseFinanceiraStatus.ELEGIVEL;
+            this.statusCartao = StatusCartao.PROCESSANDO;
+        } catch (FeignException.UnprocessableEntity e) {
+            this.analiseFinanceiraStatus = AnaliseFinanceiraStatus.NAO_ELEGIVEL;
+            this.statusCartao =StatusCartao.NEGADO;
+        }
+        Assert.state(this.analiseFinanceiraStatus !=null,"O status não devia ser nulo, há algo errado!");
+    }
+
+
 }

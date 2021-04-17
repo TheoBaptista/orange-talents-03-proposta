@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class ConsultaCartoesScheduled {
+class ConsultaCartoesScheduled {
 
     private final PropostaRepository propostaRepository;
     private final ConsultaCartaoFeignClient consultaCartaoFeignClient;
@@ -27,21 +27,30 @@ public class ConsultaCartoesScheduled {
     @Scheduled(initialDelayString = "${tempo.inicial.consulta.cartao}", fixedDelayString = "${tempo.periodico.consulta.cartao}")
     private void consultaCartao() {
 
-        List<Proposta> propostasElegiveisSemCartao = propostaRepository.findAllByCartaoIsNullAndStatusEquals(AnaliseFinanceiraStatus.ELEGIVEL);
+        List<Proposta> propostasElegiveisSemCartao = propostaRepository
+                .findAllByCartaoIsNullAndAnaliseFinanceiraStatusEquals(AnaliseFinanceiraStatus.ELEGIVEL);
 
         for (Proposta proposta : propostasElegiveisSemCartao){
             try {
+
                 ConsultaCartaoRequest request = new ConsultaCartaoRequest(proposta);
                 ConsultaCartaoResponse consultaCartaoResponse = consultaCartaoFeignClient.consultaCartao(request);
                 Cartao cartao = consultaCartaoResponse.toModel();
 
                 proposta.adicionaCartaoAProposta(cartao);
+
                 propostaRepository.save(proposta);
+
                 logger.info("Cartao com final {} relacionado a proposta {}",cartao.numeroCartaoOfuscado(),proposta.getId());
+
             }catch (FeignException e){
+
                 logger.warn("Cartão da proposta {} ainda não foi processado",proposta.getId());
+
             }catch (Exception e ){
+
                 logger.error("Erro na aplicação",e);
+
             }
         }
     }
