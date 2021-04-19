@@ -44,13 +44,9 @@ class ConsultaCartoesScheduled {
                 logger.info("Cartao com final {} relacionado a proposta {}",cartao.numeroCartaoOfuscado(),proposta.getId());
 
             }catch (FeignException e){
-
                 logger.warn("Cartão da proposta {} ainda não foi processado",proposta.getId());
-
             }catch (Exception e ){
-
-                logger.error("Erro na aplicação",e);
-
+                logger.error("Erro: ",e);
             }
         }
     }

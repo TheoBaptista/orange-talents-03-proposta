@@ -46,7 +46,7 @@ public class PropostaController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> listaPropostaPorId(@PathVariable("id") String propostaId){
+    public ResponseEntity<PropostaResponse> listaPropostaPorId(@PathVariable("id") String propostaId){
         Optional<Proposta> optional = repository.findById(propostaId);
 
         if(optional.isEmpty()) return ResponseEntity.notFound().build();
