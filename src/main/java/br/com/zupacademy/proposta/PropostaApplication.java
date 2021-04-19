@@ -8,6 +8,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableFeignClients
 @SpringBootApplication
 @EnableScheduling
+
 public class PropostaApplication {
 
 	public static void main(String[] args) {
