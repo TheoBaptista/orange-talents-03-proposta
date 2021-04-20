@@ -40,8 +40,4 @@ public class NovaPropostaRequest {
 
     public Proposta toModel() { return new Proposta(this.documento, this.email, this.nome, this.endereco, this.salario); }
 
-    public String jaExistePropostaIgual() {
-        return String.format("Campo documento : Já existe um documento com esse número!");
-    }
-
 }

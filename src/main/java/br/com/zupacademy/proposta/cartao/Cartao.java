@@ -1,17 +1,18 @@
 package br.com.zupacademy.proposta.cartao;
 
+import br.com.zupacademy.proposta.cartao.biometria.Biometria;
 import br.com.zupacademy.proposta.proposta.Proposta;
+import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
-import java.util.UUID;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Cartao {
 
     @Id
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(name = "cartao_id")
     private String id;
     @Column(nullable = false)
@@ -20,6 +21,8 @@ public class Cartao {
     private String titular;
     @OneToOne(mappedBy = "cartao")
     private Proposta proposta;
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "cartao")
+    private List<Biometria> biometrias;
 
     /**
      * @deprecated (Hibernate only)
@@ -28,9 +31,16 @@ public class Cartao {
     }
 
     public Cartao(String numero, String titular) {
-        this.id = UUID.randomUUID().toString();
         this.numero = numero;
         this.titular = titular;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getTitular() {
+        return titular;
     }
 
     public String getNumero() {
@@ -40,4 +50,9 @@ public class Cartao {
     public String numeroCartaoOfuscado(){
         return this.numero.substring(15);
     }
+
+    public void adicionarBiometria(Biometria biometria){
+        this.biometrias.add(biometria);
+    }
+
 }

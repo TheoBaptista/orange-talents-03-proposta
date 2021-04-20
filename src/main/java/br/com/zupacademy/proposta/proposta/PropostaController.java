@@ -32,7 +32,7 @@ public class PropostaController {
 
         if (repository.existsByDocumento(novaPropostaRequest.getDocumento())) {
             logger.warn("Tentativa de criação de uma proposta com o documento {} que já existe no sistema", novaPropostaRequest.documentoOfuscado());
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(new FieldErrors(novaPropostaRequest.jaExistePropostaIgual()));
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(new FieldErrors("Campo documento : Já existe uma proposta com esse número de documento!"));
         }
 
         Proposta proposta = novaPropostaRequest.toModel();

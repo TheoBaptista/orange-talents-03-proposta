@@ -3,18 +3,20 @@ package br.com.zupacademy.proposta.proposta;
 import br.com.zupacademy.proposta.cartao.Cartao;
 import br.com.zupacademy.proposta.feign.ConsultaRestricaoFinanceiraSolicitanteFeignClient;
 import feign.FeignException;
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.util.Locale;
-import java.util.UUID;
 
 @Entity
 public class Proposta {
 
     @Id
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     private String id;
     @Column(nullable = false, unique = true)
     private String documento;
@@ -48,7 +50,6 @@ public class Proposta {
         this.nome = nome;
         this.endereco = endereco;
         this.salario = salario;
-        this.id = UUID.randomUUID().toString();
     }
 
     public String getId() {
