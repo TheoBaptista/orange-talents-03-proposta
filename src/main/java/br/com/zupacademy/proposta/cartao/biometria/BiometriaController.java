@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 @RestController
@@ -33,12 +34,12 @@ public class BiometriaController {
 
         Optional<Cartao> optionalCartao = cartaoRepository.findById(cartaoId);
 
-        if (optionalCartao.isEmpty()) {
+        if(optionalCartao.isEmpty()) {
             logger.warn("Cartão com o id {} não encontrado",cartaoId);
             return ResponseEntity.notFound().build();
         }
 
-        if(Base64.isBase64(request.getBiometria())) {
+        if(request.validarBiometriaBase64()) {
 
             Cartao cartao = optionalCartao.get();
             Biometria biometria = request.toModel(cartao);

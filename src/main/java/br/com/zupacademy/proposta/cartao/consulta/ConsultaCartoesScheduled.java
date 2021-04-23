@@ -1,6 +1,7 @@
-package br.com.zupacademy.proposta.cartao;
+package br.com.zupacademy.proposta.cartao.consulta;
 
-import br.com.zupacademy.proposta.feign.ConsultaCartaoFeignClient;
+import br.com.zupacademy.proposta.cartao.Cartao;
+import br.com.zupacademy.proposta.feign.CartaoFeignClient;
 import br.com.zupacademy.proposta.proposta.AnaliseFinanceiraStatus;
 import br.com.zupacademy.proposta.proposta.Proposta;
 import br.com.zupacademy.proposta.proposta.PropostaRepository;
@@ -16,12 +17,12 @@ import java.util.List;
 class ConsultaCartoesScheduled {
 
     private final PropostaRepository propostaRepository;
-    private final ConsultaCartaoFeignClient consultaCartaoFeignClient;
+    private final CartaoFeignClient cartaoFeignClient;
     private final Logger logger = LoggerFactory.getLogger(ConsultaCartoesScheduled.class);
 
-    public ConsultaCartoesScheduled(PropostaRepository propostaRepository, ConsultaCartaoFeignClient consultaCartaoFeignClient) {
+    public ConsultaCartoesScheduled(PropostaRepository propostaRepository, CartaoFeignClient cartaoFeignClient) {
         this.propostaRepository = propostaRepository;
-        this.consultaCartaoFeignClient = consultaCartaoFeignClient;
+        this.cartaoFeignClient = cartaoFeignClient;
     }
 
     @Scheduled(initialDelayString = "${tempo.inicial.consulta.cartao}", fixedDelayString = "${tempo.periodico.consulta.cartao}")
@@ -34,7 +35,7 @@ class ConsultaCartoesScheduled {
             try {
 
                 ConsultaCartaoRequest request = new ConsultaCartaoRequest(proposta);
-                ConsultaCartaoResponse consultaCartaoResponse = consultaCartaoFeignClient.consultaCartao(request);
+                ConsultaCartaoResponse consultaCartaoResponse = cartaoFeignClient.consultaCartao(request);
                 Cartao cartao = consultaCartaoResponse.toModel();
 
                 proposta.adicionaCartaoAProposta(cartao);

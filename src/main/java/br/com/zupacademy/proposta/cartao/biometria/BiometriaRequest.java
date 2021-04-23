@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.validation.constraints.NotBlank;
+import java.util.Base64;
 
 public class BiometriaRequest {
 
@@ -18,6 +19,15 @@ public class BiometriaRequest {
 
     public String getBiometria() {
         return this.biometria;
+    }
+
+    public Boolean validarBiometriaBase64(){
+        try {
+            Base64.getDecoder().decode(this.biometria);
+            return true;
+        }catch (Exception e){
+            return false;
+        }
     }
 
     public Biometria toModel(Cartao cartao){

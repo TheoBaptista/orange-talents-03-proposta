@@ -1,5 +1,6 @@
-package br.com.zupacademy.proposta.cartao;
+package br.com.zupacademy.proposta.cartao.consulta;
 
+import br.com.zupacademy.proposta.cartao.Cartao;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 

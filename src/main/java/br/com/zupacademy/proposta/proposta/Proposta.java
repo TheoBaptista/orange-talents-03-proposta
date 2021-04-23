@@ -2,6 +2,7 @@ package br.com.zupacademy.proposta.proposta;
 
 import br.com.zupacademy.proposta.cartao.Cartao;
 import br.com.zupacademy.proposta.feign.ConsultaRestricaoFinanceiraSolicitanteFeignClient;
+import br.com.zupacademy.proposta.proposta.consulta.ConsultaPropostaRequest;
 import feign.FeignException;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.util.Assert;

@@ -1,4 +1,4 @@
-package br.com.zupacademy.proposta.cartao;
+package br.com.zupacademy.proposta.cartao.consulta;
 
 import br.com.zupacademy.proposta.proposta.Proposta;
 

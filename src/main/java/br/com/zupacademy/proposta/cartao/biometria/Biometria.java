@@ -32,7 +32,7 @@ public class Biometria {
     }
 
     public Biometria(String biometria,Cartao cartao) {
-        Assert.state(verificarBiometria(biometria),"Biometria : Está em formato inválido");
+        Assert.isTrue(Base64.isBase64(biometria),"Biometria está em formato inválido");
         this.biometria = biometria;
         this.cartao = cartao;
     }
@@ -49,7 +49,4 @@ public class Biometria {
         return dateTime;
     }
 
-    public Boolean verificarBiometria(String string){
-        return Base64.isBase64(string);
-    }
 }

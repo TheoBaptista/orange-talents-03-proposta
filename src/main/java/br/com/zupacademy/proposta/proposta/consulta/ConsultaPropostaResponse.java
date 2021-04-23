@@ -1,4 +1,4 @@
-package br.com.zupacademy.proposta.proposta;
+package br.com.zupacademy.proposta.proposta.consulta;
 
 public class ConsultaPropostaResponse {
 
