@@ -10,14 +10,14 @@ public class PropostaResponse {
     private String endereco;
     private BigDecimal salario;
     private AnaliseFinanceiraStatus status;
-    private StatusCartao statusCartao;
+    private StatusProcessamentoCartao statusProcessamentoCartao;
 
 
     public PropostaResponse(Proposta proposta) {
         this.nome = proposta.getNome();
         this.documento = proposta.getDocumento();
         this.status = proposta.getAnaliseFinanceiraStatus();
-        this.statusCartao = proposta.getStatusCartao();
+        this.statusProcessamentoCartao = proposta.getStatusCartao();
         this.email = proposta.getEmail();
         this.endereco = proposta.getEndereco();
         this.salario = proposta.getSalario();
@@ -29,8 +29,8 @@ public class PropostaResponse {
 
     public BigDecimal getSalario() { return salario; }
 
-    public StatusCartao getStatusCartao() {
-        return statusCartao;
+    public StatusProcessamentoCartao getStatusCartao() {
+        return statusProcessamentoCartao;
     }
 
     public String getNome() {

@@ -2,6 +2,7 @@ package br.com.zupacademy.proposta.cartao;
 
 import br.com.zupacademy.proposta.cartao.biometria.Biometria;
 import br.com.zupacademy.proposta.proposta.Proposta;
+import br.com.zupacademy.proposta.proposta.StatusProcessamentoCartao;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -23,6 +24,9 @@ public class Cartao {
     private Proposta proposta;
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "cartao")
     private List<Biometria> biometrias;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private StatusCartao statusCartao;
 
     /**
      * @deprecated (Hibernate only)
@@ -33,6 +37,7 @@ public class Cartao {
     public Cartao(String numero, String titular) {
         this.numero = numero;
         this.titular = titular;
+        this.statusCartao = StatusCartao.DESBLOQUEADO;
     }
 
     public String getId() {
@@ -54,5 +59,13 @@ public class Cartao {
     public void adicionarBiometria(Biometria biometria){
         this.biometrias.add(biometria);
     }
+
+    public boolean bloquearCartao(){
+         if(this.statusCartao.equals(StatusCartao.BLOQUEADO)) return false;
+         this.statusCartao = StatusCartao.BLOQUEADO;
+         return true;
+    }
+
+
 
 }

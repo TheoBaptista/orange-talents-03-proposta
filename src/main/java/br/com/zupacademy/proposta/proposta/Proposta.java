@@ -35,7 +35,7 @@ public class Proposta {
     @JoinColumn(name = "cartao_id")
     private Cartao cartao;
     @Enumerated(EnumType.STRING)
-    private StatusCartao statusCartao;
+    private StatusProcessamentoCartao statusProcessamentoCartao;
 
     /**
      * @deprecated (Hibernate only)
@@ -82,24 +82,24 @@ public class Proposta {
 
     public String documentoOfuscado(){ return this.documento.substring(1,6);}
 
-    public StatusCartao getStatusCartao() {
-        return statusCartao;
+    public StatusProcessamentoCartao getStatusCartao() {
+        return statusProcessamentoCartao;
     }
 
     public void adicionaCartaoAProposta(Cartao cartao){
         Assert.state(this.cartao==null,"Essa proposta já tem um cartão relacionado");
         this.cartao = cartao;
-        this.statusCartao = StatusCartao.CRIADO;
+        this.statusProcessamentoCartao = StatusProcessamentoCartao.CRIADO;
     }
 
     public void verificarRestricaoFinanceira(ConsultaRestricaoFinanceiraSolicitanteFeignClient consultaRestricaoFinanceiraSolicitanteFeignClient) {
         try {
             consultaRestricaoFinanceiraSolicitanteFeignClient.consultaRestricaoFinanceiraSolicitante(new ConsultaPropostaRequest(this));
             this.analiseFinanceiraStatus = AnaliseFinanceiraStatus.ELEGIVEL;
-            this.statusCartao = StatusCartao.PROCESSANDO;
+            this.statusProcessamentoCartao = StatusProcessamentoCartao.EM_PROCESSAMENTO;
         } catch (FeignException.UnprocessableEntity e) {
             this.analiseFinanceiraStatus = AnaliseFinanceiraStatus.NAO_ELEGIVEL;
-            this.statusCartao =StatusCartao.NEGADO;
+            this.statusProcessamentoCartao = StatusProcessamentoCartao.NEGADO;
         }
         Assert.state(this.analiseFinanceiraStatus !=null,"O status não devia ser nulo, há algo errado!");
     }
