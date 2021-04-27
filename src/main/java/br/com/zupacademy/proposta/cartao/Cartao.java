@@ -2,10 +2,8 @@ package br.com.zupacademy.proposta.cartao;
 
 import br.com.zupacademy.proposta.cartao.biometria.Biometria;
 import br.com.zupacademy.proposta.cartao.bloqueio.BloqueiaCartaoRequest;
-import br.com.zupacademy.proposta.cartao.bloqueio.BloqueiaCartaoResponse;
 import br.com.zupacademy.proposta.feign.CartaoFeignClient;
 import br.com.zupacademy.proposta.proposta.Proposta;
-import feign.FeignException;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -63,13 +61,12 @@ public class Cartao {
         this.biometrias.add(biometria);
     }
 
-    public boolean bloquearCartao(CartaoFeignClient cartaoFeignClient) {
-        try {
+    public StatusCartao getStatusCartao() {
+        return statusCartao;
+    }
+
+    public void bloquearCartao(CartaoFeignClient cartaoFeignClient) {
             cartaoFeignClient.bloqueiaCartao(new BloqueiaCartaoRequest("Proposta"), this.getNumero());
             this.statusCartao = StatusCartao.BLOQUEADO;
-            return true;
-        } catch (FeignException.UnprocessableEntity e) {
-            return false;
-        }
     }
 }

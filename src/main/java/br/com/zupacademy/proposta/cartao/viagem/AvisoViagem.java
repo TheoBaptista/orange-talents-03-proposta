@@ -1,14 +1,16 @@
 package br.com.zupacademy.proposta.cartao.viagem;
 
 import br.com.zupacademy.proposta.cartao.Cartao;
+import br.com.zupacademy.proposta.cartao.StatusCartao;
+import br.com.zupacademy.proposta.feign.CartaoFeignClient;
+import feign.FeignException;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import javax.validation.Valid;
-import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -62,5 +64,16 @@ public class AvisoViagem {
 
     public LocalDate getDataTerminoViagem() {
         return dataTerminoViagem;
+    }
+
+    public Boolean notifcarViagem(CartaoFeignClient cartaoFeignClient) {
+        Assert.state(this.cartao.getStatusCartao().equals(StatusCartao.DESBLOQUEADO),"O cartão está bloqueado!");
+        try {
+            cartaoFeignClient.notificarViagem(new AvisoViagemRequest(this.destino, this.dataTerminoViagem), this.cartao.getNumero());
+            return true;
+        }
+        catch (FeignException e) {
+            return false;
+        }
     }
 }

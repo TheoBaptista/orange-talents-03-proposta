@@ -14,7 +14,7 @@ public class AvisoViagemRequest {
     private final String destino;
     @NotNull
     @FutureOrPresent
-    @JsonFormat(pattern = "dd/MM/yyyy", shape = JsonFormat.Shape.STRING)
+    @JsonFormat(pattern = "yyyy/MM/dd", shape = JsonFormat.Shape.STRING)
     private final LocalDate dataTerminoViagem;
 
     @JsonCreator
