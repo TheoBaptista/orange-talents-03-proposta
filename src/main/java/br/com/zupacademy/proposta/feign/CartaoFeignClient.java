@@ -1,6 +1,8 @@
 package br.com.zupacademy.proposta.feign;
 
 import br.com.zupacademy.proposta.cartao.bloqueio.BloqueiaCartaoRequest;
+import br.com.zupacademy.proposta.cartao.carteira.AssociaCarteiraResponse;
+import br.com.zupacademy.proposta.cartao.carteira.AssociarCarteiraRequest;
 import br.com.zupacademy.proposta.cartao.consulta.ConsultaCartaoRequest;
 import br.com.zupacademy.proposta.cartao.consulta.ConsultaCartaoResponse;
 import br.com.zupacademy.proposta.cartao.bloqueio.BloqueiaCartaoResponse;
@@ -17,12 +19,15 @@ import javax.validation.Valid;
 public interface CartaoFeignClient {
 
     @PostMapping(path = "/cartoes", consumes = "application/json")
-     ConsultaCartaoResponse consultaCartao(@RequestBody @Valid ConsultaCartaoRequest request);
+    ConsultaCartaoResponse consultaCartao(@RequestBody @Valid ConsultaCartaoRequest request);
 
     @PostMapping(path = "/cartoes/{id}/bloqueios", consumes = "application/json")
     BloqueiaCartaoResponse bloqueiaCartao(@RequestBody @Valid BloqueiaCartaoRequest bloqueiaCartaoRequest, @PathVariable(value = "id") String numeroCartao);
 
     @PostMapping(path = "/cartoes/{id}/avisos", consumes = "application/json")
     AvisoViagemResponse notificarViagem(@RequestBody @Valid AvisoViagemRequest avisoViagemRequest, @PathVariable("id") String numeroCartao);
+
+    @PostMapping(path = "/cartoes/{id}/carteiras", consumes = "application/json")
+    AssociaCarteiraResponse associarCarteira(@RequestBody @Valid AssociarCarteiraRequest associarCarteiraRequest, @PathVariable("id") String numeroCartao);
 
 }

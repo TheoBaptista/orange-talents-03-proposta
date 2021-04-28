@@ -65,9 +65,13 @@ public class Proposta {
         return nome;
     }
 
-    public String getEndereco() { return endereco; }
+    public String getEndereco() {
+        return endereco;
+    }
 
-    public Cartao getCartao() { return cartao; }
+    public Cartao getCartao() {
+        return cartao;
+    }
 
     public String getDocumento() {
         return documento;
@@ -81,14 +85,16 @@ public class Proposta {
         return salario;
     }
 
-    public String documentoOfuscado(){ return this.documento.substring(1,6);}
+    public String documentoOfuscado() {
+        return this.documento.substring(1, 6);
+    }
 
     public StatusProcessamentoCartao getStatusCartao() {
         return statusProcessamentoCartao;
     }
 
-    public void adicionaCartaoAProposta(Cartao cartao){
-        Assert.state(this.cartao==null,"Essa proposta já tem um cartão relacionado");
+    public void adicionaCartaoAProposta(Cartao cartao) {
+        Assert.state(this.cartao == null, "Essa proposta já tem um cartão relacionado");
         this.cartao = cartao;
         this.statusProcessamentoCartao = StatusProcessamentoCartao.CRIADO;
     }
@@ -102,7 +108,7 @@ public class Proposta {
             this.analiseFinanceiraStatus = AnaliseFinanceiraStatus.NAO_ELEGIVEL;
             this.statusProcessamentoCartao = StatusProcessamentoCartao.NEGADO;
         }
-        Assert.state(this.analiseFinanceiraStatus !=null,"O status não devia ser nulo, há algo errado!");
+        Assert.state(this.analiseFinanceiraStatus != null, "O status não devia ser nulo, há algo errado!");
     }
 
 

@@ -29,20 +29,23 @@ public class AvisoViagemController {
 
     @PostMapping("/aviso-viagem/{id}")
     @Transactional
-    public ResponseEntity<?> criaAvisoViagem(@PathVariable("id") String idCartao, HttpServletRequest request,@Valid @RequestBody AvisoViagemRequest avisoViagemRequest){
+    public ResponseEntity<?> criaAvisoViagem(@PathVariable("id") String idCartao, HttpServletRequest request, @Valid @RequestBody AvisoViagemRequest avisoViagemRequest) {
 
-       Optional<Cartao> optionalCartao = cartaoRepository.findById(idCartao);
+        Optional<Cartao> optionalCartao = cartaoRepository.findById(idCartao);
 
-       if(optionalCartao.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new FieldErrors("Cartão : Não há cartão com esse id!"));
+        if (optionalCartao.isEmpty())
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new FieldErrors("Cartão : Não há cartão com esse id!"));
 
-       var avisoViagem = avisoViagemRequest.toModel(request.getRemoteAddr(), request.getHeader("User-agent"),optionalCartao.get());
+        AvisoViagem avisoViagem = avisoViagemRequest.toModel(request.getRemoteAddr(), request.getHeader("User-agent"), optionalCartao.get());
 
-       if(avisoViagem.notifcarViagem(cartaoFeignClient)){
+        Boolean resposta = avisoViagem.notificarViagem(cartaoFeignClient);
+
+        if (Boolean.TRUE.equals(resposta)) {
             avisoViagemRepository.save(avisoViagem);
             return ResponseEntity.ok().build();
-       }
+        }
 
-       return ResponseEntity.badRequest().body(new FieldErrors("Erro : Falha na solicitação"));
+        return ResponseEntity.badRequest().body(new FieldErrors("Erro : Falha na solicitação"));
     }
 
 }

@@ -5,10 +5,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class AvisoViagemResponse {
 
-    public String resultado;
+    @JsonProperty
+    private final String resultado;
 
     @JsonCreator
-    public AvisoViagemResponse(@JsonProperty String resultado) {
+    public AvisoViagemResponse(@JsonProperty("resultado") String resultado) {
         this.resultado = resultado;
+    }
+
+    public String getResultado() {
+        return resultado;
     }
 }

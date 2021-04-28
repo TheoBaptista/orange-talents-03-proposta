@@ -10,12 +10,12 @@ public class ConsultaCartaoResponse {
     private final String titular;
 
     @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-    public ConsultaCartaoResponse(@JsonProperty(value = "id") String id,@JsonProperty(value = "titular") String titular) {
+    public ConsultaCartaoResponse(@JsonProperty(value = "id") String id, @JsonProperty(value = "titular") String titular) {
         this.id = id;
         this.titular = titular;
     }
 
-    public Cartao toModel(){
-        return new Cartao(this.id,this.titular);
+    public Cartao toModel() {
+        return new Cartao(this.id, this.titular);
     }
 }

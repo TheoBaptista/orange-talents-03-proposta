@@ -2,6 +2,8 @@ package br.com.zupacademy.proposta.cartao;
 
 import br.com.zupacademy.proposta.cartao.biometria.Biometria;
 import br.com.zupacademy.proposta.cartao.bloqueio.BloqueiaCartaoRequest;
+import br.com.zupacademy.proposta.cartao.carteira.Carteira;
+import br.com.zupacademy.proposta.cartao.carteira.TipoCarteira;
 import br.com.zupacademy.proposta.feign.CartaoFeignClient;
 import br.com.zupacademy.proposta.proposta.Proposta;
 import org.hibernate.annotations.GenericGenerator;
@@ -23,15 +25,18 @@ public class Cartao {
     private String titular;
     @OneToOne(mappedBy = "cartao")
     private Proposta proposta;
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "cartao")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cartao")
     private List<Biometria> biometrias;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private StatusCartao statusCartao;
+    @OneToMany(mappedBy = "cartao")
+    private List<Carteira> carteiras;
 
     /**
      * @deprecated (Hibernate only)
      */
+    @Deprecated(forRemoval = false)
     public Cartao() {
     }
 
@@ -53,11 +58,11 @@ public class Cartao {
         return numero;
     }
 
-    public String numeroCartaoOfuscado(){
+    public String numeroCartaoOfuscado() {
         return this.numero.substring(15);
     }
 
-    public void adicionarBiometria(Biometria biometria){
+    public void adicionarBiometria(Biometria biometria) {
         this.biometrias.add(biometria);
     }
 
@@ -66,7 +71,11 @@ public class Cartao {
     }
 
     public void bloquearCartao(CartaoFeignClient cartaoFeignClient) {
-            cartaoFeignClient.bloqueiaCartao(new BloqueiaCartaoRequest("Proposta"), this.getNumero());
-            this.statusCartao = StatusCartao.BLOQUEADO;
+        cartaoFeignClient.bloqueiaCartao(new BloqueiaCartaoRequest("Proposta"), this.getNumero());
+        this.statusCartao = StatusCartao.BLOQUEADO;
+    }
+
+    public boolean validarCarteiraIgual(TipoCarteira novaCarteira) {
+        return this.carteiras.stream().anyMatch(carteira -> carteira.getTipoCarteira().equals(novaCarteira));
     }
 }

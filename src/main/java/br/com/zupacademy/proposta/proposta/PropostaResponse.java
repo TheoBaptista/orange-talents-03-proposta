@@ -23,11 +23,17 @@ public class PropostaResponse {
         this.salario = proposta.getSalario();
     }
 
-    public String getEmail() { return email; }
+    public String getEmail() {
+        return email;
+    }
 
-    public String getEndereco() { return endereco; }
+    public String getEndereco() {
+        return endereco;
+    }
 
-    public BigDecimal getSalario() { return salario; }
+    public BigDecimal getSalario() {
+        return salario;
+    }
 
     public StatusProcessamentoCartao getStatusCartao() {
         return statusProcessamentoCartao;

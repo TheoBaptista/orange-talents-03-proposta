@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class BloqueiaCartaoResponse {
 
 
-     private final String resultado;
+    private final String resultado;
 
     @JsonCreator
     public BloqueiaCartaoResponse(@JsonProperty("resultado") String resultado) {

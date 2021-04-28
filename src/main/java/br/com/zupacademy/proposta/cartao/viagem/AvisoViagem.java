@@ -23,23 +23,33 @@ public class AvisoViagem {
     private String id;
     @CreationTimestamp
     private LocalDateTime instanteRegistro;
-    @Column(nullable = false)  @NotBlank
-    private final String ipResponsavel;
-    @Column(nullable = false) @NotBlank
-    private final String userAgent;
     @Column(nullable = false)
-    private final String destino;
+    @NotBlank
+    private String ipResponsavel;
     @Column(nullable = false)
-    private final LocalDate dataTerminoViagem;
-    @ManyToOne @JoinColumn(nullable = false,name = "cartao_id")
-    private final Cartao cartao;
+    @NotBlank
+    private String userAgent;
+    @Column(nullable = false)
+    private String destino;
+    @Column(nullable = false)
+    private LocalDate dataTerminoViagem;
+    @ManyToOne
+    @JoinColumn(nullable = false, name = "cartao_id")
+    private Cartao cartao;
 
-    public AvisoViagem(@Valid String ipResponsavel,@Valid String userAgent, String destino, LocalDate dataTerminoViagem, Cartao cartao) {
+    public AvisoViagem(@Valid String ipResponsavel, @Valid String userAgent, String destino, LocalDate dataTerminoViagem, Cartao cartao) {
         this.ipResponsavel = ipResponsavel;
         this.userAgent = userAgent;
         this.destino = destino;
         this.dataTerminoViagem = dataTerminoViagem;
         this.cartao = cartao;
+    }
+
+    /**
+     * @deprecated (Hibernate only)
+     */
+    @Deprecated(forRemoval = false)
+    public AvisoViagem() {
     }
 
     public String getId() {
@@ -66,13 +76,13 @@ public class AvisoViagem {
         return dataTerminoViagem;
     }
 
-    public Boolean notifcarViagem(CartaoFeignClient cartaoFeignClient) {
-        Assert.state(this.cartao.getStatusCartao().equals(StatusCartao.DESBLOQUEADO),"O cartão está bloqueado!");
+    public Boolean notificarViagem(CartaoFeignClient cartaoFeignClient) {
+        Assert.state(this.cartao.getStatusCartao().equals(StatusCartao.DESBLOQUEADO), "O cartão está bloqueado!");
+
         try {
-            cartaoFeignClient.notificarViagem(new AvisoViagemRequest(this.destino, this.dataTerminoViagem), this.cartao.getNumero());
+            AvisoViagemResponse avisoViagemResponse = cartaoFeignClient.notificarViagem(new AvisoViagemRequest(this.destino, this.dataTerminoViagem), this.cartao.getNumero());
             return true;
-        }
-        catch (FeignException e) {
+        }catch (FeignException e){
             return false;
         }
     }

@@ -21,16 +21,16 @@ public class BiometriaRequest {
         return this.biometria;
     }
 
-    public Boolean validarBiometriaBase64(){
+    public Boolean validarBiometriaBase64() {
         try {
             Base64.getDecoder().decode(this.biometria);
             return true;
-        }catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
 
-    public Biometria toModel(Cartao cartao){
-        return new Biometria(this.biometria,cartao);
+    public Biometria toModel(Cartao cartao) {
+        return new Biometria(this.biometria, cartao);
     }
 }

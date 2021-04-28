@@ -9,7 +9,7 @@ public class NovaPropostaRequest {
 
     @NotBlank
     @CPForCNPJConstraint
-    @Pattern(regexp = "\\d+",message ="O documento deve conter apenas números!")
+    @Pattern(regexp = "\\d+", message = "O documento deve conter apenas números!")
     private final String documento;
     @NotBlank
     @Email
@@ -34,10 +34,12 @@ public class NovaPropostaRequest {
         return documento;
     }
 
-    public String documentoOfuscado(){
+    public String documentoOfuscado() {
         return this.documento.substring(6);
     }
 
-    public Proposta toModel() { return new Proposta(this.documento, this.email, this.nome, this.endereco, this.salario); }
+    public Proposta toModel() {
+        return new Proposta(this.documento, this.email, this.nome, this.endereco, this.salario);
+    }
 
 }

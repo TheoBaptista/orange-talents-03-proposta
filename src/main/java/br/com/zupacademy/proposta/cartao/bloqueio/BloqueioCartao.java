@@ -31,6 +31,13 @@ public class BloqueioCartao {
         this.userAgent = userAgent;
     }
 
+    /**
+     * @deprecated (Hibernate only)
+     */
+    @Deprecated(forRemoval = false)
+    public BloqueioCartao() {
+    }
+
     public String getId() {
         return id;
     }

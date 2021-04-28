@@ -6,10 +6,15 @@ import javax.validation.constraints.NotBlank;
 
 public class BloqueiaCartaoRequest {
 
-    @JsonProperty @NotBlank
+    @JsonProperty
+    @NotBlank
     private final String sistemaResponsavel;
 
     public BloqueiaCartaoRequest(String sistemaResponsavel) {
         this.sistemaResponsavel = sistemaResponsavel;
+    }
+
+    public String getSistemaResponsavel() {
+        return sistemaResponsavel;
     }
 }

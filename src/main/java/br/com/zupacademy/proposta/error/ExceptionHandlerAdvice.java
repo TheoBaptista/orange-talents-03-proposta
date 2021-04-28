@@ -28,13 +28,13 @@ public class ExceptionHandlerAdvice {
 
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<FieldErrors> validationHandle(MethodArgumentNotValidException exception){
+    public ResponseEntity<FieldErrors> validationHandle(MethodArgumentNotValidException exception) {
         List<FieldError> errors = exception.getBindingResult().getFieldErrors();
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                 new FieldErrors(
                         errors.stream()
-                                .map(e ->  String.format("Campo %s :  %s", e.getField(),e.getDefaultMessage()))
+                                .map(e -> String.format("Campo %s :  %s", e.getField(), e.getDefaultMessage()))
                                 .collect(Collectors.toList())));
     }
 
@@ -46,28 +46,28 @@ public class ExceptionHandlerAdvice {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                 new FieldErrors(
                         errors.stream()
-                                .map(e ->  String.format("Campo %s :  %s", e.getField(),e.getDefaultMessage()))
+                                .map(e -> String.format("Campo %s :  %s", e.getField(), e.getDefaultMessage()))
                                 .collect(Collectors.toList())));
 
     }
 
 
     @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
-    public ResponseEntity<FieldErrors> sqlIntegrityConstraintViolationExceptionHandle(SQLIntegrityConstraintViolationException exception){
+    public ResponseEntity<FieldErrors> sqlIntegrityConstraintViolationExceptionHandle(SQLIntegrityConstraintViolationException exception) {
         Logger logger = LoggerFactory.getLogger(ExceptionHandlerAdvice.class);
-        logger.error("Erro! Constraint de unicidade violada!",exception.getCause());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new FieldErrors("O dado já existe no nosso sistema" ));
+        logger.error("Erro! Constraint de unicidade violada!", exception.getCause());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new FieldErrors("O dado já existe no nosso sistema"));
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(IllegalArgumentException.class)
-    public FieldErrors springAssertionArgumentExceptionHandle(IllegalArgumentException exception){
+    public FieldErrors springAssertionArgumentExceptionHandle(IllegalArgumentException exception) {
         return new FieldErrors(exception.getMessage());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(IllegalStateException.class)
-    public FieldErrors springAssertionStateExceptionHandle(IllegalStateException exception){
+    public FieldErrors springAssertionStateExceptionHandle(IllegalStateException exception) {
         return new FieldErrors(exception.getMessage());
     }
 }

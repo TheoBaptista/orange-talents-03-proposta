@@ -1,6 +1,5 @@
 package br.com.zupacademy.proposta.cartao.consulta;
 
-import br.com.zupacademy.proposta.cartao.Cartao;
 import br.com.zupacademy.proposta.feign.CartaoFeignClient;
 import br.com.zupacademy.proposta.proposta.AnaliseFinanceiraStatus;
 import br.com.zupacademy.proposta.proposta.Proposta;
@@ -31,23 +30,22 @@ class ConsultaCartoesScheduled {
         List<Proposta> propostasElegiveisSemCartao = propostaRepository
                 .findAllByCartaoIsNullAndAnaliseFinanceiraStatusEquals(AnaliseFinanceiraStatus.ELEGIVEL);
 
-        for (Proposta proposta : propostasElegiveisSemCartao){
+        for (Proposta proposta : propostasElegiveisSemCartao) {
             try {
 
-                ConsultaCartaoRequest request = new ConsultaCartaoRequest(proposta);
-                ConsultaCartaoResponse consultaCartaoResponse = cartaoFeignClient.consultaCartao(request);
-                Cartao cartao = consultaCartaoResponse.toModel();
+                var request = new ConsultaCartaoRequest(proposta);
+                var consultaCartaoResponse = cartaoFeignClient.consultaCartao(request);
+                var cartao = consultaCartaoResponse.toModel();
 
                 proposta.adicionaCartaoAProposta(cartao);
 
                 propostaRepository.save(proposta);
 
-                logger.info("Cartao com final {} relacionado a proposta {}",cartao.numeroCartaoOfuscado(),proposta.getId());
 
-            }catch (FeignException e){
-                logger.warn("Cartão da proposta {} ainda não foi processado",proposta.getId());
-            }catch (Exception e ){
-                logger.error("Erro: ",e);
+            } catch (FeignException e) {
+                logger.warn("Cartão da proposta {} ainda não foi processado", proposta.getId());
+            } catch (Exception e) {
+                logger.error("Erro: ", e);
             }
         }
     }

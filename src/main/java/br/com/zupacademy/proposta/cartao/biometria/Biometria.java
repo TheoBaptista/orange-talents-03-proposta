@@ -17,7 +17,7 @@ public class Biometria {
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(name = "biometria_id")
     private String id;
-    private String biometria;
+    private String biometriaBase64;
     @ManyToOne
     @JoinColumn(name = "cartao_id")
     private Cartao cartao;
@@ -31,9 +31,9 @@ public class Biometria {
     public Biometria() {
     }
 
-    public Biometria(String biometria,Cartao cartao) {
-        Assert.isTrue(Base64.isBase64(biometria),"Biometria está em formato inválido");
-        this.biometria = biometria;
+    public Biometria(String biometriaBase64, Cartao cartao) {
+        Assert.isTrue(Base64.isBase64(biometriaBase64), "Biometria está em formato inválido");
+        this.biometriaBase64 = biometriaBase64;
         this.cartao = cartao;
     }
 
@@ -41,8 +41,8 @@ public class Biometria {
         return id;
     }
 
-    public String getBiometria() {
-        return biometria;
+    public String getBiometriaBase64() {
+        return biometriaBase64;
     }
 
     public LocalDateTime getDateTime() {

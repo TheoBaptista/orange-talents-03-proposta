@@ -18,13 +18,13 @@ public class AvisoViagemRequest {
     private final LocalDate dataTerminoViagem;
 
     @JsonCreator
-    public AvisoViagemRequest(@JsonProperty String destino,@JsonProperty LocalDate dataTerminoViagem) {
+    public AvisoViagemRequest(@JsonProperty String destino, @JsonProperty LocalDate dataTerminoViagem) {
         this.destino = destino;
         this.dataTerminoViagem = dataTerminoViagem;
     }
 
-    public AvisoViagem toModel(String ipResponsavel, String userAgent, Cartao cartao){
-        return  new AvisoViagem(ipResponsavel,userAgent,this.destino,this.dataTerminoViagem, cartao);
+    public AvisoViagem toModel(String ipResponsavel, String userAgent, Cartao cartao) {
+        return new AvisoViagem(ipResponsavel, userAgent, this.destino, this.dataTerminoViagem, cartao);
     }
 
 }
