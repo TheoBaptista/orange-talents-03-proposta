@@ -19,11 +19,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests(authorizeRequests ->
                 authorizeRequests
+                        .antMatchers(HttpMethod.GET,"/api/actuator/prometheus").permitAll()
                         .antMatchers(HttpMethod.GET, "/api/actuator/**").hasAuthority("SCOPE_adm")
                         .antMatchers(HttpMethod.POST, "/api/propostas").hasAuthority("SCOPE_propostas:write")
                         .antMatchers(HttpMethod.POST, "/api/cartoes/**").hasAuthority("SCOPE_cartoes:write")
                         .antMatchers(HttpMethod.GET, "/api/propostas/**").hasAuthority("SCOPE_propostas:read")
-                        .anyRequest().authenticated()
+
         )
                 .oauth2ResourceServer().jwt();
 

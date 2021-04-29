@@ -25,7 +25,7 @@ class ConsultaCartoesScheduled {
     }
 
     @Scheduled(initialDelayString = "${tempo.inicial.consulta.cartao}", fixedDelayString = "${tempo.periodico.consulta.cartao}")
-    private void consultaCartao() {
+    public void consultaCartao() {
 
         List<Proposta> propostasElegiveisSemCartao = propostaRepository
                 .findAllByCartaoIsNullAndAnaliseFinanceiraStatusEquals(AnaliseFinanceiraStatus.ELEGIVEL);

@@ -1,9 +1,10 @@
+global:
+  scrape_interval:     15s
+  evaluation_interval: 15s
+
 scrape_configs:
-    - job_name: 'proposta'
+  - job_name: 'proposta'
+    scrape_interval: 10s
     metrics_path: '/actuator/prometheus'
     static_configs:
-      - targets: ['http://proposta:8081']
-
-    - job_name: 'prometheus'
-    static_configs:
-      - targets: [ 'http://prometheus:9090' ]
+      - targets: ['proposta:8081']
