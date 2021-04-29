@@ -15,7 +15,7 @@
 	<description>Desafio Orange Talents proposta</description>
 	<properties>
 		<java.version>11</java.version>
-		<spring-cloud.version>2020.0.2</spring-cloud.version>
+		<spring-cloud.version>2020.0.1</spring-cloud.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -50,6 +50,11 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.opentracing.contrib</groupId>
+			<artifactId>opentracing-spring-jaeger-cloud-starter</artifactId>
+			<version>3.2.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
