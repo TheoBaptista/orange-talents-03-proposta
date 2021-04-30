@@ -31,12 +31,10 @@ public class NovaPropostaRequest {
     }
 
     public String getDocumento() {
-        return documento;
+        return this.documento;
     }
 
-    public String documentoOfuscado() {
-        return this.documento.substring(6);
-    }
+
 
     public Proposta toModel() {
         return new Proposta(this.documento, this.email, this.nome, this.endereco, this.salario);

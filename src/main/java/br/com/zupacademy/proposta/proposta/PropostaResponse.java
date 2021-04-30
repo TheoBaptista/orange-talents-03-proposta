@@ -4,13 +4,13 @@ import java.math.BigDecimal;
 
 public class PropostaResponse {
 
-    private String nome;
-    private String email;
-    private String documento;
-    private String endereco;
-    private BigDecimal salario;
-    private AnaliseFinanceiraStatus status;
-    private StatusProcessamentoCartao statusProcessamentoCartao;
+    private final String nome;
+    private final String email;
+    private final String documento;
+    private final String endereco;
+    private final BigDecimal salario;
+    private final AnaliseFinanceiraStatus status;
+    private final StatusProcessamentoCartao statusProcessamentoCartao;
 
 
     public PropostaResponse(Proposta proposta) {

@@ -1,6 +1,7 @@
 package br.com.zupacademy.proposta.proposta;
 
 import br.com.zupacademy.proposta.cartao.Cartao;
+import br.com.zupacademy.proposta.compartilhado.EncryptConverter;
 import br.com.zupacademy.proposta.feign.ConsultaRestricaoFinanceiraSolicitanteFeignClient;
 import br.com.zupacademy.proposta.proposta.consulta.ConsultaPropostaRequest;
 import feign.FeignException;
@@ -19,6 +20,7 @@ public class Proposta {
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     private String id;
+    @Convert(converter = EncryptConverter.class)
     @Column(nullable = false, unique = true)
     private String documento;
     @Column(nullable = false)
@@ -74,7 +76,7 @@ public class Proposta {
     }
 
     public String getDocumento() {
-        return documento;
+        return this.documento;
     }
 
     public AnaliseFinanceiraStatus getAnaliseFinanceiraStatus() {
@@ -83,10 +85,6 @@ public class Proposta {
 
     public BigDecimal getSalario() {
         return salario;
-    }
-
-    public String documentoOfuscado() {
-        return this.documento.substring(1, 6);
     }
 
     public StatusProcessamentoCartao getStatusCartao() {
@@ -108,7 +106,6 @@ public class Proposta {
             this.analiseFinanceiraStatus = AnaliseFinanceiraStatus.NAO_ELEGIVEL;
             this.statusProcessamentoCartao = StatusProcessamentoCartao.NEGADO;
         }
-        Assert.state(this.analiseFinanceiraStatus != null, "O status não devia ser nulo, há algo errado!");
     }
 
 
